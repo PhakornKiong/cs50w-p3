@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- BOOTSTRAP CSS -->
+        <link rel="stylesheet" type="text/css" media="screen" href="{% static 'bootstrap.min.css' %}" />
+        <!-- MY CSS -->
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+
+        <!-- JQUERY (First) -->
+        <script src="{% static 'jquery-3.3.1.slim.min.js' %}"></script>
+        <script src="{% static 'popper.min.js' %}"></script>
+
+        <!-- BOOTSTRAP JS (Last) -->
+        <script src="{% static 'bootstrap.min.js' %}"></script>
+
+        <title>PK Pizza {% block title %}{% endblock %}</title>
+    </head>
+
+    <body>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border">
+                    <a class="navbar-brand" href="{% url 'index' %}">
+                        <img src="{% static 'pizza.png' %}" width="100" height="60" alt="Pizza">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    {% if user.is_authenticated %}
+                      <ul class="navbar-nav">
+                        <li class="nav-item active">
+                          <a class="nav-link" href="{% url 'index' %}">Menu</a>
+                        </li>
+                      </ul>
+                      <ul class="navbar-nav ml-auto">
+                          <button type="button" class="btn btn-light">
+                              <a href="{%url "cart" %}">
+                                Cart
+                              </a>
+                              <span id="cart_badge" data-items="0" class="badge badge-dark">
+                                0
+                              </span>
+                          </button>
+                          <li class="nav-item"><a class="nav-link" href="{% url 'order' %}">Order</a></li>
+                          {% if user.is_superuser %}
+                          <li class="nav-item"><a class="nav-link" href="{% url 'orderManager' %}">Order Manager</a></li>
+                          {% endif %}
+                          <li class="nav-item"><a class="nav-link" href="#">{{ user.username }}</a></li>
+                          <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                      </ul>
+                    {% else %}
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                        </ul>
+                    {% endif %}
+                    </div>
+                  </nav>
+    </body>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <main class="container p-3">
+        {% block content %}{% endblock %}
+    </main>
+</html>

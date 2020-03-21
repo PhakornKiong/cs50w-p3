@@ -1,0 +1,22 @@
+{% extends "orders/layout.html" %}
+{% block content %}
+
+<legend class="border-bottom mb-12">Order</legend>
+<div class="container menu-container">
+    <div class="col-md-12">
+      {% for order in orders %}
+        {% if order.status != "Ordering" %}
+            <li>
+                Order Reference Num: {{ order.id }} - Status: {{ order.status }}  - Total Price {{ order.total_price }}
+                <form class="d-inline-block" method="get" action="{% url 'orderDetail' order.id %}">
+                <button type="submit" class="btn btn-primary">
+                    Detail
+                </button>
+                </form>
+            </li>
+        {% endif %}
+      {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "orders/layout.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <legend class="border-bottom mb-12">Pizzas</legend>
+    <div class="container menu-container">
+        <div class="col-md-12">
+          {% for pizza in pizzas %}
+                <li>
+                    {{ pizza.style }}
+                    {{ pizza.name }}
+                    {{ pizza.small_price }} SGD
+                    <form class="d-inline-block" method="get" action="{% url 'addPizza' pizza.id pizza.small_price %}">
+                    <button type="submit" class="btn btn-primary">
+                        Order
+                    </button>
+                    {{ pizza.big_price }} SGD
+                    <form class="d-inline-block" method="get" action="{% url 'addPizza' pizza.id pizza.big_price %}">
+                    <button type="submit" class="btn btn-primary">
+                        Order
+                    </button>
+                    </form>
+                </li>
+          {% endfor %}
+        </div>
+    </div>
+
+    <legend class="border-bottom mb-12">Topping</legend>
+    <div class="container menu-container">
+        <div class="col-md-12">
+          {% for topping in toppings %}
+                <li>
+                    {{ topping.name }}
+                    <form class="d-inline-block" method="get" action="{% url 'addTopping' topping.id %}">
+                    <button type="submit" class="btn btn-primary">
+                        Order
+                    </button>
+                    </form>
+                </li>
+          {% endfor %}
+        </div>
+    </div>
+
+
+    {% for category in categories %}
+    <div class="container menu-container">
+        <legend class="border-bottom mb-12"> {{ category }}</legend>
+        <div class="col-md-12">
+            {% for item in category.item_set.all %}
+                <li>
+                    {{ item.name }}
+                    {{ item.small_price }} SGD
+                    <form class="d-inline-block" method="get" action="{% url 'addItem' item.id item.small_price %}">
+                    <button type="submit" class="btn btn-primary">
+                        Order
+                    </button>
+                    </form>
+                    {% if item.big_price != None %}
+                      {{ item.big_price }} SGD
+                      <form class="d-inline-block" method="get" action="{% url 'addItem' item.id item.big_price %}">
+                      <button type="submit" class="btn btn-primary">
+                          Order
+                      </button>
+                      </form>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+
+{% endblock content%}

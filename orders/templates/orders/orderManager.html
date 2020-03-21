@@ -1,0 +1,24 @@
+{% extends "orders/layout.html" %}
+{% block content %}
+
+<legend class="border-bottom mb-12">Order Manager</legend>
+<div class="container menu-container">
+    <div class="col-md-12">
+      {% for order in orders %}
+        {% if order.status != "Ordering" %}
+            <li>
+                User: {{ order.user }}  - Order Reference Num: {{ order.id }} - Status: {{ order.status }}  - Total Price {{ order.total_price }}
+                {% if order.status == "Processing" %}
+                <form class="d-inline-block" method="get" action="{% url 'orderComplete' order.id %}">
+                <button type="submit" class="btn btn-primary">
+                    Complete Order
+                </button>
+                </form>
+                {% endif %}
+            </li>
+        {% endif %}
+      {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

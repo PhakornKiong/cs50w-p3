@@ -1,0 +1,44 @@
+{% extends "orders/layout.html" %}
+{% block content %}
+
+<legend class="border-bottom mb-12">Order Detail - Reference Order Number: {{ order_number }}</legend>
+<div class="container menu-container">
+    <div class="col-md-12">
+      {% for Pizza in PizzaOrder %}
+            <li>
+                {{ Pizza.pizza_ref.style}} Pizza {{ Pizza.pizza_ref.name }} - {{ Pizza.order_price}} USD
+            </li>
+          {% for Topping in ToppingOrder %}
+            {% if Topping.pizza_order_ref.id == Pizza.id %}
+              <li>
+                  {{ Topping.topping_ref.name }}
+              </li>
+            {% endif %}
+          {% endfor %}
+      {% endfor %}
+
+      {% for Item in ItemOrder %}
+        {% if Item.item_ref.small_price == Item.order_price %}
+              <li>
+                  {{ Item.item_ref.category }} - {{ Item.item_ref.name }} (Small) - {{Item.order_price}} USD
+              </li>
+        {% else %}
+              <li>
+                  {{ Item.item_ref.category }} - {{ Item.item_ref.name }} (Big) - {{Item.order_price}} USD
+              </li>
+        {% endif %}
+      {% endfor %}
+    </div>
+</div>
+
+<legend class="border-bottom mb-12">Status</legend>
+<div>
+   {{ orders.status }}
+</div>
+
+<legend class="border-bottom mb-12">Total</legend>
+<div>
+   {{ orders.total_price }} USD
+</div>
+
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "orders/layout.html" %}
+{% block content %}
+
+<legend class="border-bottom mb-12">Review Order</legend>
+<div class="container menu-container">
+    <div class="col-md-12">
+      {% for Pizza in PizzaOrder %}
+            <li>
+                {{ Pizza.pizza_ref.style}} Pizza {{ Pizza.pizza_ref.name }} - {{ Pizza.order_price}} USD
+                <form class="d-inline-block" method="get" action="{% url 'removePizza' Pizza.id %}">
+                <button type="submit" class="btn btn-primary">
+                    Remove
+                </button>
+                </form>
+            </li>
+          {% for Topping in ToppingOrder %}
+            {% if Topping.pizza_order_ref.id == Pizza.id %}
+              <li>
+                  {{ Topping.topping_ref.name }}
+                  <form class="d-inline-block" method="get" action="{% url 'removeTopping' Topping.id %}">
+                  <button type="submit" class="btn btn-primary">
+                      Remove
+                  </button>
+                  </form>
+              </li>
+            {% endif %}
+          {% endfor %}
+      {% endfor %}
+    </div>
+</div>
+
+<div class="container menu-container">
+    <div class="col-md-12">
+      {% for Item in ItemOrder %}
+        {% if Item.item_ref.small_price == Item.order_price %}
+              <li>
+                  {{ Item.item_ref.category }} - {{ Item.item_ref.name }} (Small) - {{Item.order_price}} USD
+                  <form class="d-inline-block" method="get" action="{% url 'removeItem' Item.id %}">
+                  <button type="submit" class="btn btn-primary">
+                      Remove
+                  </button>
+                  </form>
+              </li>
+        {% else %}
+              <li>
+                  {{ Item.item_ref.category }} - {{ Item.item_ref.name }} (Big) - {{Item.order_price}} USD
+                  <form class="d-inline-block" method="get" action="{% url 'removeItem' Item.id %}">
+                  <button type="submit" class="btn btn-primary">
+                      Remove
+                  </button>
+                  </form>
+              </li>
+        {% endif %}
+      {% endfor %}
+    </div>
+</div>
+<legend class="border-bottom mb-12">Total</legend>
+<div>
+   {{ total_price }} USD
+</div>
+
+<div>
+  <form class="d-inline-block" method="get" action="{% url 'checkout' %}">
+  <button type="submit" class="btn btn-primary">
+      Checkout
+  </button>
+  </form>
+</div>
+
+
+{% endblock %}
